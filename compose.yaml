@@ -1,0 +1,14 @@
+services:
+  tempo-field:
+    build: .
+    environment:
+      TEMPO_OWNER_KEY: ${TEMPO_OWNER_KEY:?Run python3 scripts/setup.py}
+    ports: ["127.0.0.1:8118:8118"]
+    volumes: ["tempo-data:/data"]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: unless-stopped
+volumes:
+  tempo-data:

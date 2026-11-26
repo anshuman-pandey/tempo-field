@@ -1,0 +1,12 @@
+{
+  "name": "tempo-field",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test:browser": "python3 scripts/check_browser.py",
+    "test:catalogs": "node scripts/catalogs.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

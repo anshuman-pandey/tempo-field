@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-11-26T13:45:04.549807+00:00",
+  "state": "local recovered preview; unpublished",
+  "recovery": "Source file writes recovered from this chat history after workspace/archive loss; original Git object IDs are not preserved. Fresh checks performed.",
+  "python_tests_passed": 14,
+  "container_recovery": "PASS: non-root/read-only runtime, restart, private backup, clean-volume restore, fresh writes",
+  "browser": "PASS: fresh English workflow and five translated workflows, draft preservation, exports, persistence and 390px layout",
+  "published": false,
+  "hosted_demo_url": null,
+  "pending": [
+    "Independent repository creation/publication",
+    "Persistent HTTPS host configuration",
+    "Native-speaker review"
+  ],
+  "dependency_audit": "No known vulnerabilities in installed Python dependency set after upgrading local pip; npm lockfile audit clean for Invoice Sprig"
+}
