@@ -55,3 +55,7 @@ Tests cover concurrent timers, persistence, input validation, corrections, authe
 [Scope and comparison](docs/SCOPE.md) · [Operations](docs/DEPLOYMENT.md) · [License](LICENSE)
 
 Fresh acceptance (26 November): 14 Python tests, English workflow and five translated browser workflows, catalog parity, non-root container restart and fresh-volume restoration. Run `npm ci`, `npx playwright install chromium`, and `npm run test:browser` in the activated Python environment; `CHROMIUM_PATH` optionally selects an installed browser.
+
+## Source and deployment status
+
+[Independent public repository](https://github.com/anshuman-pandey/tempo-field). Source publication is verified. A public hosted deployment has not been configured or verified. Use the persistent Docker instructions for self-hosting; do not expose the development server.

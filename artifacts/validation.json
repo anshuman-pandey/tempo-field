@@ -1,16 +1,19 @@
 {
   "checked_at": "2026-11-26T13:45:04.549807+00:00",
-  "state": "local recovered preview; unpublished",
+  "state": "public self-hosted source preview",
   "recovery": "Source file writes recovered from this chat history after workspace/archive loss; original Git object IDs are not preserved. Fresh checks performed.",
   "python_tests_passed": 14,
   "container_recovery": "PASS: non-root/read-only runtime, restart, private backup, clean-volume restore, fresh writes",
   "browser": "PASS: fresh English workflow and five translated workflows, draft preservation, exports, persistence and 390px layout",
-  "published": false,
+  "published": true,
   "hosted_demo_url": null,
   "pending": [
-    "Independent repository creation/publication",
     "Persistent HTTPS host configuration",
     "Native-speaker review"
   ],
-  "dependency_audit": "No known vulnerabilities in installed Python dependency set after upgrading local pip; npm lockfile audit clean for Invoice Sprig"
+  "dependency_audit": "No known vulnerabilities in installed Python dependency set after upgrading local pip; npm lockfile audit clean for Invoice Sprig",
+  "source_publication": {
+    "url": "https://github.com/anshuman-pandey/tempo-field",
+    "verified_at": "2026-11-26T13:47:05.301496+00:00"
+  }
 }
