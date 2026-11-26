@@ -44,3 +44,30 @@ class Checks(unittest.TestCase):
  def test_names(self):
   for value in ['',None,'x\n','x'*101]:
    with self.assertRaises(Invalid):self.l.project(value)
+
+ def test_oversized_ids_are_json_errors_without_mutation(self):
+  entry=self.l.entry(self.p,'Keep',self.now-120,self.now-60)
+  before=self.l.snapshot();huge=10**100
+  requests=[('post','/api/entries',{'project':huge,'note':'No insert'}),
+            ('post',f'/api/entries/{huge}/stop',{}),
+            ('put',f'/api/entries/{huge}',{'start':self.now-120,'end':self.now-60,'note':'No edit'}),
+            ('delete',f'/api/entries/{huge}',None)]
+  for method,url,payload in requests:
+   response=getattr(self.c,method)(url,headers=self.auth,json=payload)
+   self.assertEqual(response.status_code,400);self.assertIn('error',response.json)
+   self.assertEqual(self.l.snapshot(),before)
+ def test_invalid_unicode_is_rejected_without_mutation(self):
+  entry=self.l.entry(self.p,'Keep',self.now-120,self.now-60);before=self.l.snapshot()
+  for invalid in ['bad\ud800','bad\udfff']:
+   for method,url,payload in [
+    ('post','/api/projects',{'name':invalid}),
+    ('post','/api/entries',{'project':self.p,'note':invalid}),
+    ('put',f'/api/entries/{entry}',{'start':self.now-120,'end':self.now-60,'note':invalid})]:
+    response=getattr(self.c,method)(url,headers=self.auth,json=payload)
+    self.assertEqual(response.status_code,400);self.assertIn('Unicode',response.json['error'])
+    self.assertEqual(self.l.snapshot(),before)
+ def test_valid_multilingual_and_supplementary_unicode_round_trip(self):
+  project=self.l.project('日本語 café 🌱');self.l.entry(project,'完成 — 😀',self.now-120,self.now-60)
+  saved=self.c.get('/api/state',headers=self.auth).json
+  self.assertEqual(saved['entries'][0]['note'],'完成 — 😀')
+  self.assertEqual(saved['entries'][0]['project_name'],'日本語 café 🌱')

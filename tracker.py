@@ -16,7 +16,12 @@ class Ledger:
   finally:c.close()
  def text(self,value,limit):
   if not isinstance(value,str) or not value.strip() or len(value)>limit or any(ord(x)<32 for x in value):raise Invalid('Enter text without control characters, within the displayed limit.')
+  try:value.encode("utf-8")
+  except UnicodeEncodeError:raise Invalid("Enter valid Unicode text.")
   return value.strip()
+ def identifier(self,value):
+  if type(value)!=int or not 1<=value<=9223372036854775807:raise Invalid("Choose a valid project or entry ID.")
+  return value
  def project(self,name):
   name=self.text(name,100)
   with self.db() as c:
@@ -27,7 +32,7 @@ class Ledger:
   now=int(time.time())
   if type(start)!=int or type(end)!=int or not 0<=start<end<=now or end-start>604800:raise Invalid('Use past times, with an end after the start and a duration of at most seven days.')
  def entry(self,project,note,start=None,end=None):
-  if type(project)!=int:raise Invalid('Choose a project.')
+  self.identifier(project)
   note=self.text(note,500)
   if start is None:
    if end is not None:raise Invalid('Start time is required.')
@@ -39,6 +44,7 @@ class Ledger:
    try:return c.execute('INSERT INTO entries(project,note,start,end) VALUES(?,?,?,?)',(project,note,start,end)).lastrowid
    except sqlite3.IntegrityError:raise Invalid('Stop the running timer first.')
  def stop(self,id):
+  self.identifier(id)
   with self.db() as c:
    row=c.execute('SELECT * FROM entries WHERE id=?',(id,)).fetchone()
    if not row or row['end'] is not None:raise Invalid('Running timer not found. Refresh your workspace.')
@@ -47,10 +53,12 @@ class Ledger:
    if end-row['start']>604800:raise Invalid('Timer exceeds seven days. Edit its start and end manually.')
    c.execute('UPDATE entries SET end=? WHERE id=?',(end,id))
  def edit(self,id,start,end,note):
+  self.identifier(id)
   self.interval(start,end);note=self.text(note,500)
   with self.db() as c:
    if not c.execute('UPDATE entries SET start=?,end=?,note=? WHERE id=?',(start,end,note,id)).rowcount:raise Invalid('Entry not found.')
  def delete(self,id):
+  self.identifier(id)
   with self.db() as c:
    if not c.execute('DELETE FROM entries WHERE id=?',(id,)).rowcount:raise Invalid('Entry not found.')
  def snapshot(self):
